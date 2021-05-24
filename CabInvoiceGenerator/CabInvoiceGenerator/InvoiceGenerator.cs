@@ -65,5 +65,69 @@ namespace CabInvoiceGenerator
             }
             return Math.Max(totalFare, MINIMUM_FARE);
         }
+
+        public InvoiceSummary CalculateFare(Ride[] rides)
+        {
+            double totalFare = 0;
+            // Exception handling for the invalid  distance and time
+            try
+            {
+                //calculating Total Fare For All Rides using foreach loop
+                foreach (Ride ride in rides)
+                {
+                    //returns totalfare
+                    totalFare += this.CalculateFare(ride.distance, ride.time);
+                }
+            }
+            catch (CabInvoiceException)
+            {
+                if (rides == null)
+                {
+                    throw new CabInvoiceException(CabInvoiceException.ExceptionType.NULL_RIDES, "Rides Are Null");
+                }
+            }
+            //returning invoice summary which has total fare and number of rides
+            return new InvoiceSummary(rides.Length, totalFare);
+        }
+
+        /// <summary>
+        /// Function to add rides for userId
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="rides">The rides.</param>
+        /// <exception cref="CabInvoiceGenerator.CabInVoiceException">Rides Are Null</exception>
+        public void AddRides(string userId, Ride[] rides)
+        {
+            try
+            {
+                //adding ride to the specified User
+                rideRepo.AddRide(userId, rides);
+            }
+            catch (CabInvoiceException)
+            {
+                if (rides == null)
+                {
+                    throw new CabInvoiceException(CabInvoiceException.ExceptionType.NULL_RIDES, "Rides Are Null");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to Get Summary By UserId
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="CabInvoiceGenerator.CabInVoiceException">Invalid UserID</exception>
+        public InvoiceSummary GetInvoiceSummary(string userId)
+        {
+            try
+            {
+                return this.CalculateFare(rideRepo.GetRide(userId));
+            }
+            catch (CabInvoiceException)
+            {
+                throw new CabInvoiceException(CabInvoiceException.ExceptionType.INVALID_USER_ID, "Invalid UserID");
+            }
+        }
     }
 }

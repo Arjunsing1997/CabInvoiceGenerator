@@ -14,7 +14,8 @@ namespace CabInvoiceGenerator
             INVALID_TIME,
             INVALID_RIDES,
             INVALID_USER_ID,
-            INVALID_DISTANCE
+            INVALID_DISTANCE,
+            NULL_RIDES
         }
 
         //Creating an ExceptionType class object
