@@ -9,7 +9,7 @@ namespace CabInvoiceGenerator
     public class InvoiceSummary
     {
         //variables
-        private int numberOfRides;
+        private double numberOfRides;
         public double totalFare;
         private double averageFare;
 
@@ -18,12 +18,19 @@ namespace CabInvoiceGenerator
         /// </summary>
         /// <param name="numberofRides">The numberof rides.</param>
         /// <param name="totalFare">The total fare.</param>
-        public InvoiceSummary(int numberOfRides, double totalFare)
+        public InvoiceSummary( double totalFare, double numberOfRides)
         {
             this.numberOfRides = numberOfRides;
             this.totalFare = totalFare;
             //formula for average fare
             this.averageFare = this.totalFare / numberOfRides;
+        }
+
+        public InvoiceSummary(double totalFare, int length, double averageFare)
+        {
+            this.totalFare = totalFare;
+            this.numberOfRides = length;
+            this.averageFare = averageFare;
         }
 
         /// <summary>

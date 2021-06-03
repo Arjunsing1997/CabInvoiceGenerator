@@ -129,5 +129,39 @@ namespace CabInvoiceGenerator
                 throw new CabInvoiceException(CabInvoiceException.ExceptionType.INVALID_USER_ID, "Invalid UserID");
             }
         }
+
+        /// <summary>
+        /// Calculates the average fare.
+        /// </summary>
+        /// <param name="rides">The rides.</param>
+        /// <returns></returns>
+        /// <exception cref="CabInVoiceException">Rides passed are null..</exception>
+        public InvoiceSummary CalculateAvgFare(Ride[] rides)
+        {
+            double totalFare = 0;
+            /// Adding a variable to compute average fare
+            double averageFare = 0;
+            /// Exception handling for the invalid  distance and time
+            try
+            {
+                // Using foreach loop to take one ride each time
+                foreach (Ride ride in rides)
+                {
+                    // returning total fare
+                    totalFare += this.CalculateFare(ride.distance, ride.time);
+                }
+                // Computing average fare = (total fare/ number of rides)
+                averageFare = (totalFare / rides.Length);
+            }
+            catch (CabInvoiceException)
+            {
+                if (rides == null)
+                {
+                    throw new CabInvoiceException(CabInvoiceException.ExceptionType.NULL_RIDES, "Rides passed are null..");
+                }
+            }
+            // Returning the invoice summary with average fare 
+            return new InvoiceSummary(totalFare, rides.Length, averageFare);
+        }
     }
 }
